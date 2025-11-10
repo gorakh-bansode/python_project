@@ -1,31 +1,12 @@
-name: Manual Trigger Workflow
-
 on:
   workflow_dispatch:
     inputs:
-      logLevel:
-        description: 'Log level'
+      branch:
+        description: 'Branch to run the workflow on'
         required: true
-        default: 'info'
-        type: choice
+        default: 'main'
+        type: 'choice'
         options:
-        - info
-        - warning
-        - debug
-      environment:
-        description: 'Environment to deploy to'
-        required: true
-        type: environment
-
-jobs:
-  build:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-      - name: Print inputs
-        run: |
-          echo "Log Level: ${{ github.event.inputs.logLevel }}"
-          echo "Environment: ${{ github.event.inputs.environment }}"
-      - name: Manual Trigger Message
-        run: echo "This workflow was manually triggered."
+          - main
+          - staging
+          - production
