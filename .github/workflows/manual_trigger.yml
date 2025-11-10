@@ -1,13 +1,39 @@
-name: GitHub manual trigger Demo
+name: Manual Workflow with Inputs
+
 on:
   workflow_dispatch:
     inputs:
-      branch:
-        description: 'Branch to run the workflow on'
+      environment:
+        description: 'Environment to deploy to'
         required: true
-        default: 'main'
-        type: 'choice'
+        default: 'dev'
+        type: choice
         options:
-          - main
+          - dev
           - staging
           - production
+      release_version:
+        description: 'Release version to deploy'
+        required: false
+        type: string
+      run_tests:
+        description: 'Run integration tests?'
+        required: false
+        default: false
+        type: boolean
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Deploy to ${{ github.event.inputs.environment }}
+        run: |
+          echo "Deploying version ${{ github.event.inputs.release_version }} to ${{ github.event.inputs.environment }}..."
+          # Add your deployment logic here
+          if ${{ github.event.inputs.run_tests == 'true' }}; then
+            echo "Running integration tests..."
+            # Add your test execution logic here
+          fi
